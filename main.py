@@ -3,9 +3,13 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import pandas as pd
+
 from openpyxl import Workbook, load_workbook
 
-import time
+wb = load_workbook('WIEBETECH PRICES.xlsx')
+ws = wb.active
+max_row = ws.max_row
+total = 0
 
 service = Service()
 option = webdriver.ChromeOptions()
@@ -15,12 +19,9 @@ url = "https://emn178.github.io/online-tools/sha256.html"
 driver.get(url)
 time.sleep(2)
 
-find = driver.find_element(By.ID, "input")
-find.send_keys("Sample text")
-
-find = driver.find_element(By.ID, "output")
-temp = find.get_attribute("value")
-temp2 = find.get_attribute("placeholder")
-print(temp2)
-
+find = driver.find_element(By.LINK_TEXT, "SHA224")
+find.click()
+delay = 2
+WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, "input")))
+print("objekts ir uz ekrana")
 input()
