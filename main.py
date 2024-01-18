@@ -1,8 +1,6 @@
-import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-import pandas as pd
 
 from openpyxl import Workbook, load_workbook
 
@@ -25,7 +23,6 @@ option = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=service, options=option)
 
 base_url = 'https://wiebetech.com'
-code = "7100-3000-11"
 
 def get_product_link(product_code):
     search_url = f"{base_url}?s={product_code}"
@@ -35,4 +32,15 @@ def get_product_link(product_code):
     product_url = driver.current_url
     return product_url
 
-print (get_product_link(code))
+row = 1
+for code in product_codes:
+    row += 1
+    try:
+        link = get_product_link(code)
+        ws[f'I{row}'].value = link
+    except:
+        ws[f'I{row}'].value = "Product is not available"
+        continue
+
+wb.save('WIEBETECH PRICES AND LINKS.xlsx')
+wb.close()
